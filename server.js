@@ -1,6 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 
 import paiementsRoutes from './routes/paiementsRoutes.js';
 import elevesRoutes from './routes/elevesRoutes.js';
@@ -15,11 +17,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connexion à MongoDB
-mongoose.connect('mongodb://localhost:27017/gestion_scolaire', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// Debug temporaire : afficher la variable d'environnement
+console.log('MONGODB_URI:', process.env.MONGODB_URI);
+// Connexion à MongoDB Atlas via la variable d'environnement
+mongoose.connect(process.env.MONGODB_URI)
+.then(() => console.log('✅ Connecté à MongoDB Atlas'))
+.catch((err) => console.error('❌ Erreur de connexion MongoDB :', err));
+
 
 // Routes
 app.use('/api/eleves', elevesRoutes);
@@ -38,7 +42,8 @@ app.get('/api/classes', async (req, res) => {
   }
 });
 
-// Démarrage du serveur
-app.listen(5000, () => {
-  console.log('Serveur démarré sur le port 5000');
+// Lancer le serveur sur le port défini dans .env
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Serveur démarré sur le port ${PORT}`);
 });
