@@ -1,5 +1,5 @@
 import Paiement from '../models/Paiement.js';
-import Eleve from '../models/Eleve.js';
+import { Eleve } from '../models/Eleve.js';
 
 // Création d'un paiement simple
 export const createPaiement = async (req, res) => {

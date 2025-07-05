@@ -9,4 +9,6 @@ const eleveSchema = new mongoose.Schema({
   sexe: String,
 });
 
-export default mongoose.model('Eleve', eleveSchema);
+const Eleve = mongoose.model('Eleve', eleveSchema);
+
+export { Eleve };
