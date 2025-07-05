@@ -14,18 +14,24 @@ import statistiquesRoutes from './routes/statistiquesRoutes.js';
 import Classe from './models/Classe.js'; // Si encore utilisé pour /api/classes
 
 const app = express();
-app.use(cors());
-app.use(express.json());
 
+// 1. Middleware (doit être avant les routes)
+// Configuration CORS plus explicite pour résoudre les erreurs de preflight
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.use(express.json()); // Permet de lire le JSON dans les requêtes
+
+// 2. Connexion à la base de données
 // Debug temporaire : afficher la variable d'environnement
 console.log('MONGODB_URI:', process.env.MONGODB_URI);
-// Connexion à MongoDB Atlas via la variable d'environnement
 mongoose.connect(process.env.MONGODB_URI)
-.then(() => console.log('✅ Connecté à MongoDB Atlas'))
-.catch((err) => console.error('❌ Erreur de connexion MongoDB :', err));
+  .then(() => console.log('✅ Connecté à MongoDB Atlas'))
+  .catch((err) => console.error('❌ Erreur de connexion MongoDB :', err));
 
-
-// Routes
+// 3. Routes de l'API
 app.use('/api/eleves', elevesRoutes);
 app.use('/api/paiements', paiementsRoutes);
 app.use('/api/classes', classesRoutes);
