@@ -1,15 +1,13 @@
-import Eleve from '../models/Eleve.js';
+import { Eleve } from '../models/Eleve.js';
 
 const ajouterEleve = async (req, res) => {
   try {
-    const dernierEleve = await Eleve.findOne().sort({ identifiant: -1 });
-    const nouvelIdentifiant = dernierEleve ? String(parseInt(dernierEleve.identifiant) + 1).padStart(4, '0') : '0001';
-
-    const nouvelEleve = new Eleve({ ...req.body, identifiant: nouvelIdentifiant });
+    // Logique d'identifiant personnalisée supprimée pour utiliser l'_id de MongoDB
+    const nouvelEleve = new Eleve(req.body);
     await nouvelEleve.save();
     res.status(201).json(nouvelEleve);
   } catch (error) {
-    res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'élève.' });
+    res.status(500).json({ message: "Erreur lors de l'ajout de l'élève." });
   }
 };
 
