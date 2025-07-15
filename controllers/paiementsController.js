@@ -69,16 +69,12 @@ export const getPaiementsImpayesParClasseEtMois = async (req, res) => {
   }
 };
 
-// Ajouter un paiement par nom/prénom/classe/mois
+// Ajouter un paiement par eleveId
 export const ajouterPaiement = async (req, res) => {
   try {
-    const { nom, prenom, classe, mois, montant, type } = req.body;
+    const { eleveId, mois, montant, type } = req.body;
 
-    const eleve = await Eleve.findOne({
-      nom:    new RegExp('^' + nom + '$', 'i'),
-      prenom: new RegExp('^' + prenom + '$', 'i'),
-      classe: new RegExp('^' + classe + '$', 'i'),
-    });
+    const eleve = await Eleve.findById(eleveId);
     if (!eleve) return res.status(404).json({ message: "Élève non trouvé" });
 
     // Vérifier doublon seulement pour les mensualités
